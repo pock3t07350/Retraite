@@ -12,17 +12,24 @@ TARGET = datetime(2026, 5, 29, 17, 0, 0)
 now = datetime.now()
 remaining = TARGET - now
 
-# 🌐 config
+# 🌐 config (fond blanc)
 st.set_page_config(page_title="Retraite Thomas", layout="wide")
 
-# 🛰️ TITLE XXL
+st.markdown("""
+<style>
+body {
+    background-color: white;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# 🛰️ TITLE XXL (fond blanc)
 st.markdown("""
 <h1 style="
     text-align:center;
     font-size:90px;
-    color:#00ff66;
+    color:#0a7a2f;
     font-family:monospace;
-    text-shadow: 0px 0px 25px #00ff66;
 ">
 🛰️ RETRAITE THOMAS
 </h1>
@@ -31,7 +38,7 @@ st.markdown("""
 # ❌ mission terminée
 if remaining.total_seconds() <= 0:
     st.markdown("""
-    <h1 style='text-align:center;font-size:70px;color:#00ff66;'>
+    <h1 style='text-align:center;font-size:70px;color:#0a7a2f;'>
     🎉 MISSION ACCOMPLIE 🚀
     </h1>
     """, unsafe_allow_html=True)
@@ -48,7 +55,7 @@ total = (TARGET - datetime(2025, 1, 1)).total_seconds()
 progress = max(0.0, min(1.0, remaining.total_seconds() / total))
 
 # =========================
-# 🧭 JAUGE ANALOGIQUE
+# 🧭 JAUGE
 # =========================
 def gauge(progress):
     fig = go.Figure(go.Indicator(
@@ -57,11 +64,11 @@ def gauge(progress):
         number={"suffix": "%"},
         gauge={
             "axis": {"range": [0, 100]},
-            "bar": {"color": "#00ff66"},
+            "bar": {"color": "#0a7a2f"},
             "steps": [
-                {"range": [0, 50], "color": "#111111"},
-                {"range": [50, 80], "color": "#222222"},
-                {"range": [80, 100], "color": "#003300"},
+                {"range": [0, 50], "color": "#f2f2f2"},
+                {"range": [50, 80], "color": "#e6e6e6"},
+                {"range": [80, 100], "color": "#d9d9d9"},
             ],
             "threshold": {
                 "line": {"color": "red", "width": 4},
@@ -72,72 +79,42 @@ def gauge(progress):
     ))
 
     fig.update_layout(
-        paper_bgcolor="black",
-        font={"color": "#00ff66"},
+        paper_bgcolor="white",
+        font={"color": "#0a7a2f"},
         height=350
     )
     return fig
 
 # =========================
-# 📡 RADAR (style progress circulaire)
-# =========================
-def radar(progress):
-    fig = go.Figure()
-
-    fig.add_trace(go.Scatterpolar(
-        r=[progress, progress, progress],
-        theta=[0, 120, 240],
-        fill='toself',
-        line=dict(color="#00ff66")
-    ))
-
-    fig.update_layout(
-        polar=dict(
-            radialaxis=dict(visible=True, range=[0, 1])
-        ),
-        showlegend=False,
-        paper_bgcolor="black",
-        font_color="#00ff66",
-        height=350
-    )
-    return fig
-
-# =========================
-# 🧱 LAYOUT PRINCIPAL
+# 🧱 COMPTEURS
 # =========================
 
 col1, col2, col3, col4 = st.columns(4)
 
-col1.markdown(f"<h1 style='font-size:70px;text-align:center'>{days}</h1><p style='text-align:center'>JOURS</p>", unsafe_allow_html=True)
-col2.markdown(f"<h1 style='font-size:70px;text-align:center'>{hours}</h1><p style='text-align:center'>HEURES</p>", unsafe_allow_html=True)
-col3.markdown(f"<h1 style='font-size:70px;text-align:center'>{minutes}</h1><p style='text-align:center'>MINUTES</p>", unsafe_allow_html=True)
-col4.markdown(f"<h1 style='font-size:70px;text-align:center'>{seconds}</h1><p style='text-align:center'>SECONDES</p>", unsafe_allow_html=True)
+col1.markdown(f"<h1 style='font-size:70px;text-align:center;color:#0a7a2f'>{days}</h1><p style='text-align:center'>JOURS</p>", unsafe_allow_html=True)
+col2.markdown(f"<h1 style='font-size:70px;text-align:center;color:#0a7a2f'>{hours}</h1><p style='text-align:center'>HEURES</p>", unsafe_allow_html=True)
+col3.markdown(f"<h1 style='font-size:70px;text-align:center;color:#0a7a2f'>{minutes}</h1><p style='text-align:center'>MINUTES</p>", unsafe_allow_html=True)
+col4.markdown(f"<h1 style='font-size:70px;text-align:center;color:#0a7a2f'>{seconds}</h1><p style='text-align:center'>SECONDES</p>", unsafe_allow_html=True)
 
 st.markdown("---")
 
 # =========================
-# 🧭 GAUGE + RADAR
+# 🧭 GAUGE
 # =========================
 
-col5, col6 = st.columns(2)
+st.markdown("### 🧭 COMPTE-TOUR MISSION")
 
-with col5:
-    st.markdown("### 🧭 COMPTE-TOUR MISSION")
-    st.plotly_chart(gauge(progress), use_container_width=True)
-
-with col6:
-    st.markdown("### 📡 RADAR RETRAITE")
-    st.plotly_chart(radar(progress), use_container_width=True)
+st.plotly_chart(gauge(progress), use_container_width=True)
 
 # =========================
-# 📊 PROGRESSION BAR
+# 📊 PROGRESSION
 # =========================
 
 st.markdown("### 📊 PROGRESSION GLOBALE")
 st.progress(progress)
 
 # =========================
-# 🚨 ALARME LOGIQUE
+# 🚨 ALERTES
 # =========================
 
 st.markdown("---")
@@ -155,6 +132,6 @@ else:
 
 st.markdown("""
 <p style='text-align:center;color:gray'>
-🛰️ système cockpit actif — contrôle mission retraite en temps réel
+🛰️ système cockpit actif — mode fond blanc
 </p>
 """, unsafe_allow_html=True)
