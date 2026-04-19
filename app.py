@@ -2,8 +2,10 @@ import streamlit as st
 from datetime import datetime
 from streamlit_autorefresh import st_autorefresh
 import plotly.graph_objects as go
+import requests
+from streamlit_lottie import st_lottie
 
-# 🔁 refresh live
+# 🔁 refresh chaque seconde
 st_autorefresh(interval=1000, key="refresh")
 
 # 🎯 date cible
@@ -15,6 +17,12 @@ remaining = TARGET - now
 # 🌐 config page
 st.set_page_config(page_title="Retraite Thomas", layout="wide")
 
+# 🧠 départ figé (0% = première ouverture)
+if "start_time" not in st.session_state:
+    st.session_state.start_time = datetime.now()
+
+start = st.session_state.start_time
+
 # ⚪ fond blanc
 st.markdown("""
 <style>
@@ -23,12 +31,6 @@ body {
 }
 </style>
 """, unsafe_allow_html=True)
-
-# 🧠 départ figé au premier lancement (0% = aujourd’hui)
-if "start_time" not in st.session_state:
-    st.session_state.start_time = datetime.now()
-
-start = st.session_state.start_time
 
 # 🛰️ TITRE XXL
 st.markdown("""
@@ -41,8 +43,6 @@ st.markdown("""
 🛰️ RETRAITE THOMAS
 </h1>
 """, unsafe_allow_html=True)
-
-st.markdown("---")
 
 # ❌ mission terminée
 if remaining.total_seconds() <= 0:
@@ -64,7 +64,23 @@ progress = (now - start).total_seconds() / (TARGET - start).total_seconds()
 progress = max(0.0, min(1.0, progress))
 
 # =========================
-# 🧭 JAUGE COMPTE-TOUR
+# 🎣 LOTTIE FISHING
+# =========================
+def load_lottie(url):
+    try:
+        r = requests.get(url)
+        if r.status_code != 200:
+            return None
+        return r.json()
+    except:
+        return None
+
+fishing = load_lottie(
+    "https://assets5.lottiefiles.com/packages/lf20_q5pk6p1k.json"
+)
+
+# =========================
+# 🧭 JAUGE
 # =========================
 def gauge(progress):
     fig = go.Figure(go.Indicator(
@@ -95,32 +111,34 @@ def gauge(progress):
     return fig
 
 # =========================
-# ⏱ COMPTEURS XXL
+# 🧱 LAYOUT PRINCIPAL
 # =========================
 
-col1, col2, col3, col4 = st.columns(4)
+col_anim, col_main = st.columns([1, 3])
 
-col1.markdown(f"<h1 style='font-size:70px;text-align:center;color:#0a7a2f'>{days}</h1><p style='text-align:center'>JOURS</p>", unsafe_allow_html=True)
-col2.markdown(f"<h1 style='font-size:70px;text-align:center;color:#0a7a2f'>{hours}</h1><p style='text-align:center'>HEURES</p>", unsafe_allow_html=True)
-col3.markdown(f"<h1 style='font-size:70px;text-align:center;color:#0a7a2f'>{minutes}</h1><p style='text-align:center'>MINUTES</p>", unsafe_allow_html=True)
-col4.markdown(f"<h1 style='font-size:70px;text-align:center;color:#0a7a2f'>{seconds}</h1><p style='text-align:center'>SECONDES</p>", unsafe_allow_html=True)
+# 🎣 ANIMATION
+with col_anim:
+    if fishing:
+        st_lottie(fishing, height=320, speed=1, loop=True, key="fishing")
+
+# ⏱ COMPTEUR
+with col_main:
+
+    st.markdown("### 🛰️ RETRAITE THOMAS")
+
+    st.markdown(f"""
+    <h1 style='font-size:60px;color:#0a7a2f'>
+    {days} j {hours} h {minutes} m {seconds} s
+    </h1>
+    """, unsafe_allow_html=True)
+
+    st.progress(progress)
 
 st.markdown("---")
 
-# =========================
-# 🧭 COMPTE-TOUR
-# =========================
-
+# 🧭 JAUGE
 st.markdown("### 🧭 COMPTE-TOUR MISSION")
-
 st.plotly_chart(gauge(progress), use_container_width=True)
-
-# =========================
-# 📊 PROGRESSION
-# =========================
-
-st.markdown("### 📊 PROGRESSION GLOBALE")
-st.progress(progress)
 
 # =========================
 # 🚨 ALARMES
@@ -141,6 +159,6 @@ else:
 
 st.markdown("""
 <p style='text-align:center;color:gray'>
-🛰️ système cockpit actif — départ figé à la première ouverture
+🛰️ système cockpit actif — pêcheur + compteur synchronisés
 </p>
 """, unsafe_allow_html=True)
