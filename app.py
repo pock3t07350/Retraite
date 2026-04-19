@@ -8,25 +8,30 @@ st_autorefresh(interval=1000, key="refresh")
 # 🎯 Date cible (29 mai 2026 à 17h00)
 TARGET = datetime(2026, 5, 29, 17, 0, 0)
 
-# 🧠 Calcul du temps restant
+# 🧠 Calcul temps restant
 now = datetime.now()
 remaining = TARGET - now
 
-# Si déjà passé
+# 🌐 config page
+st.set_page_config(page_title="Retraite Thomas", layout="centered")
+
+# 🛰️ TITRE GROS FORMAT
+st.markdown(
+    "<h1 style='text-align:center;font-size:60px;'>🛰️ RETRAITE THOMAS</h1>",
+    unsafe_allow_html=True
+)
+
+st.markdown("---")
+
+# 🎯 Fin de mission
 if remaining.total_seconds() <= 0:
-    st.title("🎉 MISSION ACCOMPLIE")
-    st.success("Départ en retraite atteint 🚀")
+    st.success("🎉 MISSION ACCOMPLIE — BONNE RETRAITE ! 🚀")
 else:
 
     days = remaining.days
     hours = remaining.seconds // 3600
     minutes = (remaining.seconds % 3600) // 60
     seconds = remaining.seconds % 60
-
-    # 🛰️ UI style cockpit simple
-    st.set_page_config(page_title="Retraite Countdown", layout="centered")
-
-    st.title("🛰️ MISSION RETRAITE COUNTDOWN")
 
     st.markdown("### ⏳ Temps restant")
 
@@ -38,9 +43,10 @@ else:
     col4.metric("Secondes", seconds)
 
     # 📊 progression globale
-    total_duration = (TARGET - datetime(2025, 1, 1)).total_seconds()
-    progress = max(0.0, min(1.0, remaining.total_seconds() / total_duration))
+    total = (TARGET - datetime(2025, 1, 1)).total_seconds()
+    progress = max(0.0, min(1.0, remaining.total_seconds() / total))
 
     st.progress(progress)
 
-    st.caption("Système de mission actif — mise à jour en temps réel 🚀")
+    st.markdown("---")
+    st.caption("🛰️ Système de mission actif — mise à jour temps réel")
