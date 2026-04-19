@@ -2,10 +2,8 @@ import streamlit as st
 from datetime import datetime
 from streamlit_autorefresh import st_autorefresh
 import plotly.graph_objects as go
-import requests
-from streamlit_lottie import st_lottie
 
-# 🔁 refresh chaque seconde
+# 🔁 refresh live
 st_autorefresh(interval=1000, key="refresh")
 
 # 🎯 date cible
@@ -64,20 +62,9 @@ progress = (now - start).total_seconds() / (TARGET - start).total_seconds()
 progress = max(0.0, min(1.0, progress))
 
 # =========================
-# 🎣 LOTTIE FISHING
+# 🎣 GIF PÊCHEUR (FIABLE)
 # =========================
-def load_lottie(url):
-    try:
-        r = requests.get(url)
-        if r.status_code != 200:
-            return None
-        return r.json()
-    except:
-        return None
-
-fishing = load_lottie(
-    "https://assets5.lottiefiles.com/packages/lf20_q5pk6p1k.json"
-)
+fishing_gif = "https://media.giphy.com/media/3o6Zt6ML6BklcajjsA/giphy.gif"
 
 # =========================
 # 🧭 JAUGE
@@ -116,10 +103,9 @@ def gauge(progress):
 
 col_anim, col_main = st.columns([1, 3])
 
-# 🎣 ANIMATION
+# 🎣 PÊCHEUR
 with col_anim:
-    if fishing:
-        st_lottie(fishing, height=320, speed=1, loop=True, key="fishing")
+    st.image(fishing_gif, caption="🎣 Pêche à la mouche en cours")
 
 # ⏱ COMPTEUR
 with col_main:
@@ -159,6 +145,6 @@ else:
 
 st.markdown("""
 <p style='text-align:center;color:gray'>
-🛰️ système cockpit actif — pêcheur + compteur synchronisés
+🛰️ système cockpit actif — version stable sans dépendances externes fragiles
 </p>
 """, unsafe_allow_html=True)
