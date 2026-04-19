@@ -21,7 +21,7 @@ if "start_time" not in st.session_state:
 
 start = st.session_state.start_time
 
-# ⚪ fond blanc
+# ⚪ fond blanc propre
 st.markdown("""
 <style>
 body {
@@ -51,7 +51,7 @@ if remaining.total_seconds() <= 0:
     """, unsafe_allow_html=True)
     st.stop()
 
-# ⏳ calculs temps
+# ⏳ temps
 days = remaining.days
 hours = remaining.seconds // 3600
 minutes = (remaining.seconds % 3600) // 60
@@ -62,13 +62,39 @@ progress = (now - start).total_seconds() / (TARGET - start).total_seconds()
 progress = max(0.0, min(1.0, progress))
 
 # =========================
-# 🎣 GIF PÊCHEUR (FIABLE)
+# 🎣 PÊCHEUR (SAFE)
 # =========================
-fishing_gif = "https://media.giphy.com/media/3o6Zt6ML6BklcajjsA/giphy.gif"
+
+# 👉 OPTION 1 : GIF local (RECOMMANDÉ)
+# Mets un fichier fishing.gif dans ton repo GitHub
+fishing_path = "fishing.gif"
+
+# fallback si fichier absent
+try:
+    st.image(fishing_path, caption="🎣 Pêche à la mouche", use_container_width=True)
+except:
+    st.info("🎣 (Ajoute fishing.gif dans ton repo pour afficher l’animation)")
+
+# =========================
+# ⏱ COMPTEUR
+# =========================
+
+st.markdown("### 🛰️ RETRAITE THOMAS")
+
+st.markdown(f"""
+<h1 style='font-size:60px;color:#0a7a2f'>
+{days} j {hours} h {minutes} m {seconds} s
+</h1>
+""", unsafe_allow_html=True)
+
+st.progress(progress)
+
+st.markdown("---")
 
 # =========================
 # 🧭 JAUGE
 # =========================
+
 def gauge(progress):
     fig = go.Figure(go.Indicator(
         mode="gauge+number",
@@ -97,32 +123,6 @@ def gauge(progress):
     )
     return fig
 
-# =========================
-# 🧱 LAYOUT PRINCIPAL
-# =========================
-
-col_anim, col_main = st.columns([1, 3])
-
-# 🎣 PÊCHEUR
-with col_anim:
-    st.image(fishing_gif, caption="🎣 Pêche à la mouche en cours")
-
-# ⏱ COMPTEUR
-with col_main:
-
-    st.markdown("### 🛰️ RETRAITE THOMAS")
-
-    st.markdown(f"""
-    <h1 style='font-size:60px;color:#0a7a2f'>
-    {days} j {hours} h {minutes} m {seconds} s
-    </h1>
-    """, unsafe_allow_html=True)
-
-    st.progress(progress)
-
-st.markdown("---")
-
-# 🧭 JAUGE
 st.markdown("### 🧭 COMPTE-TOUR MISSION")
 st.plotly_chart(gauge(progress), use_container_width=True)
 
@@ -145,6 +145,6 @@ else:
 
 st.markdown("""
 <p style='text-align:center;color:gray'>
-🛰️ système cockpit actif — version stable sans dépendances externes fragiles
+🛰️ système cockpit actif — version stable sans dépendances externes
 </p>
 """, unsafe_allow_html=True)
