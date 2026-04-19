@@ -12,9 +12,10 @@ TARGET = datetime(2026, 5, 29, 17, 0, 0)
 now = datetime.now()
 remaining = TARGET - now
 
-# 🌐 config (fond blanc)
+# 🌐 config page
 st.set_page_config(page_title="Retraite Thomas", layout="wide")
 
+# ⚪ fond blanc
 st.markdown("""
 <style>
 body {
@@ -23,7 +24,13 @@ body {
 </style>
 """, unsafe_allow_html=True)
 
-# 🛰️ TITLE XXL (fond blanc)
+# 🧠 départ figé au premier lancement (0% = aujourd’hui)
+if "start_time" not in st.session_state:
+    st.session_state.start_time = datetime.now()
+
+start = st.session_state.start_time
+
+# 🛰️ TITRE XXL
 st.markdown("""
 <h1 style="
     text-align:center;
@@ -35,6 +42,8 @@ st.markdown("""
 </h1>
 """, unsafe_allow_html=True)
 
+st.markdown("---")
+
 # ❌ mission terminée
 if remaining.total_seconds() <= 0:
     st.markdown("""
@@ -44,18 +53,18 @@ if remaining.total_seconds() <= 0:
     """, unsafe_allow_html=True)
     st.stop()
 
-# ⏳ calculs
+# ⏳ calculs temps
 days = remaining.days
 hours = remaining.seconds // 3600
 minutes = (remaining.seconds % 3600) // 60
 seconds = remaining.seconds % 60
 
-# 📊 progression globale
-total = (TARGET - datetime(2025, 1, 1)).total_seconds()
-progress = max(0.0, min(1.0, remaining.total_seconds() / total))
+# 📊 progression figée (0 → 100%)
+progress = (now - start).total_seconds() / (TARGET - start).total_seconds()
+progress = max(0.0, min(1.0, progress))
 
 # =========================
-# 🧭 JAUGE
+# 🧭 JAUGE COMPTE-TOUR
 # =========================
 def gauge(progress):
     fig = go.Figure(go.Indicator(
@@ -86,7 +95,7 @@ def gauge(progress):
     return fig
 
 # =========================
-# 🧱 COMPTEURS
+# ⏱ COMPTEURS XXL
 # =========================
 
 col1, col2, col3, col4 = st.columns(4)
@@ -99,7 +108,7 @@ col4.markdown(f"<h1 style='font-size:70px;text-align:center;color:#0a7a2f'>{seco
 st.markdown("---")
 
 # =========================
-# 🧭 GAUGE
+# 🧭 COMPTE-TOUR
 # =========================
 
 st.markdown("### 🧭 COMPTE-TOUR MISSION")
@@ -114,7 +123,7 @@ st.markdown("### 📊 PROGRESSION GLOBALE")
 st.progress(progress)
 
 # =========================
-# 🚨 ALERTES
+# 🚨 ALARMES
 # =========================
 
 st.markdown("---")
@@ -132,6 +141,6 @@ else:
 
 st.markdown("""
 <p style='text-align:center;color:gray'>
-🛰️ système cockpit actif — mode fond blanc
+🛰️ système cockpit actif — départ figé à la première ouverture
 </p>
 """, unsafe_allow_html=True)
