@@ -21,7 +21,7 @@ if "start_time" not in st.session_state:
 
 start = st.session_state.start_time
 
-# ⚪ fond blanc propre
+# ⚪ fond blanc
 st.markdown("""
 <style>
 body {
@@ -30,7 +30,7 @@ body {
 </style>
 """, unsafe_allow_html=True)
 
-# 🛰️ TITRE XXL
+# 🛰️ TITRE
 st.markdown("""
 <h1 style="
     text-align:center;
@@ -42,7 +42,7 @@ st.markdown("""
 </h1>
 """, unsafe_allow_html=True)
 
-# ❌ mission terminée
+# ❌ fin mission
 if remaining.total_seconds() <= 0:
     st.markdown("""
     <h1 style='text-align:center;font-size:70px;color:#0a7a2f;'>
@@ -57,33 +57,19 @@ hours = remaining.seconds // 3600
 minutes = (remaining.seconds % 3600) // 60
 seconds = remaining.seconds % 60
 
-# 📊 progression figée (0 → 100%)
+# 📊 progression 0 → 100
 progress = (now - start).total_seconds() / (TARGET - start).total_seconds()
 progress = max(0.0, min(1.0, progress))
-
-# =========================
-# 🎣 PÊCHEUR (SAFE)
-# =========================
-
-# 👉 OPTION 1 : GIF local (RECOMMANDÉ)
-# Mets un fichier fishing.gif dans ton repo GitHub
-fishing_path = "fishing.gif"
-
-# fallback si fichier absent
-try:
-    st.image(fishing_path, caption="🎣 Pêche à la mouche", use_container_width=True)
-except:
-    st.info("🎣 (Ajoute fishing.gif dans ton repo pour afficher l’animation)")
 
 # =========================
 # ⏱ COMPTEUR
 # =========================
 
-st.markdown("### 🛰️ RETRAITE THOMAS")
+st.markdown("### 🛰️ COMPTEUR RETRAITE")
 
 st.markdown(f"""
-<h1 style='font-size:60px;color:#0a7a2f'>
-{days} j {hours} h {minutes} m {seconds} s
+<h1 style='font-size:70px;color:#0a7a2f;text-align:center;'>
+{days} J  {hours} H  {minutes} M  {seconds} S
 </h1>
 """, unsafe_allow_html=True)
 
@@ -92,7 +78,7 @@ st.progress(progress)
 st.markdown("---")
 
 # =========================
-# 🧭 JAUGE
+# 🧭 Jauge simple
 # =========================
 
 def gauge(progress):
@@ -103,41 +89,30 @@ def gauge(progress):
         gauge={
             "axis": {"range": [0, 100]},
             "bar": {"color": "#0a7a2f"},
-            "steps": [
-                {"range": [0, 50], "color": "#f2f2f2"},
-                {"range": [50, 80], "color": "#e6e6e6"},
-                {"range": [80, 100], "color": "#d9d9d9"},
-            ],
-            "threshold": {
-                "line": {"color": "red", "width": 4},
-                "thickness": 0.75,
-                "value": 100
-            }
         }
     ))
 
     fig.update_layout(
         paper_bgcolor="white",
         font={"color": "#0a7a2f"},
-        height=350
+        height=300
     )
     return fig
 
-st.markdown("### 🧭 COMPTE-TOUR MISSION")
+st.markdown("### 🧭 PROGRESSION")
+
 st.plotly_chart(gauge(progress), use_container_width=True)
 
 # =========================
-# 🚨 ALARMES
+# 🚨 STATUS
 # =========================
 
-st.markdown("---")
-
 if progress > 0.9:
-    st.error("🚨 ALERTE : RETRAITE IMMINENTE")
+    st.error("🚨 RETRAITE IMMINENTE")
 elif progress > 0.75:
-    st.warning("⚠️ Phase finale mission")
+    st.warning("⚠️ Phase finale")
 else:
-    st.success("🟢 Mission en cours nominale")
+    st.success("🟢 Mission active")
 
 # =========================
 # FOOTER
@@ -145,6 +120,6 @@ else:
 
 st.markdown("""
 <p style='text-align:center;color:gray'>
-🛰️ système cockpit actif — version stable sans dépendances externes
+version stable sans images ni dépendances externes
 </p>
 """, unsafe_allow_html=True)
