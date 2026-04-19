@@ -3,34 +3,59 @@ from datetime import datetime
 from streamlit_autorefresh import st_autorefresh
 import plotly.graph_objects as go
 
+# =========================
+# 🌐 CONFIG PAGE (DOIT ÊTRE EN PREMIER)
+# =========================
+st.set_page_config(page_title="Retraite Thomas", layout="wide")
+
+# =========================
 # 🔁 refresh live
+# =========================
 st_autorefresh(interval=1000, key="refresh")
 
+# =========================
 # 🎯 date cible
+# =========================
 TARGET = datetime(2026, 5, 29, 17, 0, 0)
 
 now = datetime.now()
 remaining = TARGET - now
 
-# 🌐 config page
-st.set_page_config(page_title="Retraite Thomas", layout="wide")
-
-# 🧠 départ figé (0% = première ouverture)
+# =========================
+# 🧠 départ figé
+# =========================
 if "start_time" not in st.session_state:
     st.session_state.start_time = datetime.now()
 
 start = st.session_state.start_time
 
-# ⚪ fond blanc
+# =========================
+# 🎬 BACKGROUND GIF
+# =========================
 st.markdown("""
 <style>
-body {
-    background-color: white;
+[data-testid="stAppViewContainer"] {
+    background: url("logo.gif");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* rendre le contenu lisible */
+[data-testid="stAppViewContainer"] > .main {
+    background: transparent;
+}
+
+/* option: améliorer lisibilité du texte */
+html, body, [class*="css"] {
+    color: #0a7a2f;
 }
 </style>
 """, unsafe_allow_html=True)
 
+# =========================
 # 🛰️ TITRE
+# =========================
 st.markdown("""
 <h1 style="
     text-align:center;
@@ -42,7 +67,9 @@ st.markdown("""
 </h1>
 """, unsafe_allow_html=True)
 
-# ❌ fin mission
+# =========================
+# ❌ FIN MISSION
+# =========================
 if remaining.total_seconds() <= 0:
     st.markdown("""
     <h1 style='text-align:center;font-size:70px;color:#0a7a2f;'>
@@ -51,20 +78,23 @@ if remaining.total_seconds() <= 0:
     """, unsafe_allow_html=True)
     st.stop()
 
-# ⏳ temps
+# =========================
+# ⏳ TEMPS RESTANT
+# =========================
 days = remaining.days
 hours = remaining.seconds // 3600
 minutes = (remaining.seconds % 3600) // 60
 seconds = remaining.seconds % 60
 
-# 📊 progression 0 → 100
+# =========================
+# 📊 PROGRESSION
+# =========================
 progress = (now - start).total_seconds() / (TARGET - start).total_seconds()
 progress = max(0.0, min(1.0, progress))
 
 # =========================
 # ⏱ COMPTEUR
 # =========================
-
 st.markdown("### 🛰️ COMPTEUR RETRAITE")
 
 st.markdown(f"""
@@ -78,9 +108,8 @@ st.progress(progress)
 st.markdown("---")
 
 # =========================
-# 🧭 Jauge simple
+# 🧭 GAUGE
 # =========================
-
 def gauge(progress):
     fig = go.Figure(go.Indicator(
         mode="gauge+number",
@@ -100,13 +129,11 @@ def gauge(progress):
     return fig
 
 st.markdown("### 🧭 PROGRESSION")
-
 st.plotly_chart(gauge(progress), use_container_width=True)
 
 # =========================
 # 🚨 STATUS
 # =========================
-
 if progress > 0.9:
     st.error("🚨 RETRAITE IMMINENTE")
 elif progress > 0.75:
@@ -117,9 +144,8 @@ else:
 # =========================
 # FOOTER
 # =========================
-
 st.markdown("""
 <p style='text-align:center;color:gray'>
-version stable sans images ni dépendances externes
+version stable avec fond animé GIF
 </p>
 """, unsafe_allow_html=True)
