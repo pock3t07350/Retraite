@@ -62,7 +62,7 @@ st.markdown(f"""
 st.markdown("<div class='title'>RETRAITE THOMAS</div>", unsafe_allow_html=True)
 
 # =========================
-# COMPTEUR (SANS HTML)
+# COMPTEUR
 # =========================
 days = remaining.days
 hours = remaining.seconds // 3600
@@ -71,10 +71,25 @@ seconds = remaining.seconds % 60
 
 col1, col2, col3, col4 = st.columns(4, gap="large")
 
-col1.metric("JOURS", days)
-col2.metric("HEURES", hours)
-col3.metric("MINUTES", minutes)
-col4.metric("SECONDES", seconds)
+col1.markdown(
+    f"<div style='text-align:center'><div>JOURS</div><div style='font-size:70px;font-weight:800'>{days}</div></div>",
+    unsafe_allow_html=True
+)
+
+col2.markdown(
+    f"<div style='text-align:center'><div>HEURES</div><div style='font-size:70px;font-weight:800'>{hours}</div></div>",
+    unsafe_allow_html=True
+)
+
+col3.markdown(
+    f"<div style='text-align:center'><div>MINUTES</div><div style='font-size:70px;font-weight:800'>{minutes}</div></div>",
+    unsafe_allow_html=True
+)
+
+col4.markdown(
+    f"<div style='text-align:center'><div>SECONDES</div><div style='font-size:70px;font-weight:800'>{seconds}</div></div>",
+    unsafe_allow_html=True
+)
 
 # =========================
 # BARRE
