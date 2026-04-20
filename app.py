@@ -50,7 +50,7 @@ st.markdown(f"""
     font-size:60px;
     font-weight:700;
     color:#0a2a43;
-    margin-bottom:20px;
+    margin-bottom:80px;
 }}
 
 </style>
