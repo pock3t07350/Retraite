@@ -19,13 +19,13 @@ now = datetime.now()
 remaining = TARGET - now
 
 # =========================
-# BACKGROUND GIF
+# GIF BACKGROUND
 # =========================
-def b64(file):
-    with open(file, "rb") as f:
+def get_base64(file_path):
+    with open(file_path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
-gif = b64("logo.gif")
+gif = get_base64("logo.gif")
 
 st.markdown(f"""
 <style>
@@ -43,17 +43,17 @@ st.markdown(f"""
 .title {{
     text-align:center;
     font-size:70px;
-    margin-bottom:30px;
+    margin-bottom:40px;
 }}
 
 .big {{
-    font-size:180px;  /* 🔥 3x plus gros */
+    font-size:120px;
     text-align:center;
     margin:0;
 }}
 
 .label {{
-    font-size:30px;
+    font-size:28px;
     text-align:center;
     opacity:0.9;
 }}
@@ -117,6 +117,7 @@ progress = max(0.0, min(1.0, elapsed / total))
 st.progress(progress)
 
 st.markdown(
-    f"<div style='text-align:center;font-size:40px;'>{progress * 100:.8f} %</div>",
+    f"<div style='text-align:center;font-size:40px;margin-top:20px;'>"
+    f"{progress * 100:.8f} %</div>",
     unsafe_allow_html=True
 )
