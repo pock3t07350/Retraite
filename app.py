@@ -96,8 +96,30 @@ col4.markdown(
 # =========================
 st.progress(progress)
 
-st.markdown(
-    f"<div style='text-align:center;font-size:35px;color:#0a2a43;margin-top:100px;'>"
-    f"{progress * 100:.8f} %</div>",
-    unsafe_allow_html=True
-)
+st.markdown(f"""
+<div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:15px;
+    color:#0a2a43;
+    font-weight:600;
+    font-size:18px;
+">
+
+    <div>📅 Départ : 01 Déc 2008</div>
+
+    <div style="
+        border:2px solid #0a2a43;
+        padding:8px 16px;
+        border-radius:12px;
+        font-size:22px;
+        font-weight:800;
+    ">
+        {progress * 100:.8f} %
+    </div>
+
+    <div>🎯 Fin : 29 Mai 2026</div>
+
+</div>
+""", unsafe_allow_html=True)
