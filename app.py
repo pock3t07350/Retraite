@@ -19,6 +19,14 @@ now = datetime.now()
 remaining = TARGET - now
 
 # =========================
+# PROGRESSION
+# =========================
+total = (TARGET - START).total_seconds()
+elapsed = (now - START).total_seconds()
+
+progress = max(0.0, min(1.0, elapsed / total))
+
+# =========================
 # GIF BACKGROUND
 # =========================
 def get_base64(file):
@@ -69,18 +77,9 @@ col3.markdown(f"### MINUTES\n# {minutes}")
 col4.markdown(f"### SECONDES\n# {seconds}")
 
 # =========================
-# PROGRESSION
-# =========================
-total = (TARGET - START).total_seconds()
-elapsed = (now - START).total_seconds()
-
-progress = max(0.0, min(1.0, elapsed / total))
-
-# =========================
-# BARRE (ULTRA STABLE)
+# BARRE (VERSION QUI MARCHAIT)
 # =========================
 
-# dates séparées (important)
 st.markdown("""
 <div style="display:flex; justify-content:space-between; margin-top:25px; color:#0a2a43; font-weight:600;">
     <div>📅 01 Déc 2008</div>
@@ -88,7 +87,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# barre
 st.markdown(f"""
 <div style="
     width:100%;
@@ -96,11 +94,12 @@ st.markdown(f"""
     background:#e6eef5;
     border-radius:12px;
     overflow:hidden;
+    margin-top:8px;
     border:1px solid #0a2a43;
 ">
 
     <div style="
-        width:{progress * 100:.4f}%;
+        width:{progress * 100:.2f}%;
         height:100%;
         background:#0a2a43;
     "></div>
@@ -108,14 +107,11 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-# pourcentage
-st.markdown(f"""
-<div style="
-    text-align:center;
-    font-size:35px;
-    margin-top:10px;
-    color:#0a2a43;
-">
-    {progress * 100:.8f} %
-</div>
-""", unsafe_allow_html=True)
+st.markdown(
+    f"""
+    <div style="text-align:center; font-size:35px; margin-top:10px; color:#0a2a43;">
+        {progress * 100:.8f} %
+    </div>
+    """,
+    unsafe_allow_html=True
+)
