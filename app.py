@@ -31,7 +31,7 @@ if "start_time" not in st.session_state:
 start = st.session_state.start_time
 
 # =========================
-# 🎬 GIF BACKGROUND (FIABLE)
+# 🎬 GIF BACKGROUND
 # =========================
 def get_base64(file_path):
     with open(file_path, "rb") as f:
@@ -41,8 +41,9 @@ gif_base64 = get_base64("logo.gif")
 
 st.markdown(f"""
 <style>
+
 /* =========================
-   FOND GLOBAL GIF
+   BACKGROUND HUD
 ========================= */
 .stApp {{
     background: url("data:image/gif;base64,{gif_base64}");
@@ -52,9 +53,7 @@ st.markdown(f"""
     background-attachment: fixed;
 }}
 
-/* =========================
-   SUPPRESSION FONDS STREAMLIT
-========================= */
+/* transparent global */
 [data-testid="stAppViewContainer"],
 [data-testid="stHeader"],
 [data-testid="stToolbar"],
@@ -62,30 +61,42 @@ st.markdown(f"""
     background: transparent !important;
 }}
 
-/* blocs UI transparents */
-div[data-testid="stVerticalBlock"],
-div[data-testid="stHorizontalBlock"],
-div[data-testid="stMetric"],
-div[data-testid="stDataFrame"],
-div[data-testid="stPlotlyChart"] {{
-    background: transparent !important;
-    box-shadow: none !important;
+/* =========================
+   HUD PANEL STYLE
+========================= */
+.hud-box {{
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(10,122,47,0.5);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 10px auto;
+    width: 280px;
+    text-align: center;
+    box-shadow: 0px 0px 15px rgba(10,122,47,0.2);
 }}
 
-/* progress bar clean */
-.stProgress > div > div > div > div {{
-    background-color: #0a7a2f;
+.hud-number {{
+    font-size: 70px;
+    color: #0a7a2f;
+    font-family: monospace;
+    margin: 0;
 }}
 
-/* texte */
+.hud-label {{
+    font-size: 22px;
+    color: #0a7a2f;
+    letter-spacing: 2px;
+}}
+
+/* texte global */
 html, body, [class*="css"] {{
     color: #0a7a2f;
 }}
 
-/* titre effet cockpit */
 h1, h2, h3 {{
     text-shadow: 0px 0px 10px rgba(0,0,0,0.4);
 }}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -95,7 +106,7 @@ h1, h2, h3 {{
 st.markdown("""
 <h1 style="
     text-align:center;
-    font-size:90px;
+    font-size:85px;
     color:#0a7a2f;
     font-family:monospace;
 ">
@@ -115,7 +126,7 @@ if remaining.total_seconds() <= 0:
     st.stop()
 
 # =========================
-# ⏳ TEMPS RESTANT
+# ⏳ TEMPS
 # =========================
 days = remaining.days
 hours = remaining.seconds // 3600
@@ -129,24 +140,45 @@ progress = (now - start).total_seconds() / (TARGET - start).total_seconds()
 progress = max(0.0, min(1.0, progress))
 
 # =========================
-# ⏱ COMPTEUR
+# 🛰️ HUD COMPTEUR
 # =========================
-st.markdown("### 🛰️ COMPTEUR RETRAITE")
+st.markdown("### 🛰️ HUD SYSTEM STATUS")
 
-st.markdown(f"""
-<h1 style="
-    font-size:70px;
-    color:#0a7a2f;
-    text-align:center;
-    background: transparent;
-">
-{days} J  {hours} H  {minutes} M  {seconds} S
-</h1>
-""", unsafe_allow_html=True)
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    st.markdown(f"""
+    <div class="hud-box">
+        <div class="hud-number">{days}</div>
+        <div class="hud-label">JOURS</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    st.markdown(f"""
+    <div class="hud-box">
+        <div class="hud-number">{hours}</div>
+        <div class="hud-label">HEURES</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col3:
+    st.markdown(f"""
+    <div class="hud-box">
+        <div class="hud-number">{minutes}</div>
+        <div class="hud-label">MINUTES</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col4:
+    st.markdown(f"""
+    <div class="hud-box">
+        <div class="hud-number">{seconds}</div>
+        <div class="hud-label">SECONDES</div>
+    </div>
+    """, unsafe_allow_html=True)
 
 st.progress(progress)
-
-st.markdown("---")
 
 # =========================
 # 🧭 GAUGE
@@ -179,15 +211,15 @@ st.plotly_chart(gauge(progress), use_container_width=True)
 if progress > 0.9:
     st.error("🚨 RETRAITE IMMINENTE")
 elif progress > 0.75:
-    st.warning("⚠️ Phase finale")
+    st.warning("⚠️ PHASE FINALE")
 else:
-    st.success("🟢 Mission active")
+    st.success("🟢 MISSION ACTIVE")
 
 # =========================
 # FOOTER
 # =========================
 st.markdown("""
 <p style='text-align:center;color:rgba(0,0,0,0.5)'>
-version cockpit transparent + fond GIF animé
+HUD SYSTEM v1 — transparent cockpit mode
 </p>
 """, unsafe_allow_html=True)
