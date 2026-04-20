@@ -77,41 +77,12 @@ col3.markdown(f"### MINUTES\n# {minutes}")
 col4.markdown(f"### SECONDES\n# {seconds}")
 
 # =========================
-# BARRE (VERSION QUI MARCHAIT)
+# BARRE SIMPLE (VERSION QUI MARCHE)
 # =========================
-
-st.markdown("""
-<div style="display:flex; justify-content:space-between; margin-top:25px; color:#0a2a43; font-weight:600;">
-    <div>📅 01 Déc 2008</div>
-    <div>🎯 29 Mai 2026</div>
-</div>
-""", unsafe_allow_html=True)
-
-st.markdown(f"""
-<div style="
-    width:100%;
-    height:24px;
-    background:#e6eef5;
-    border-radius:12px;
-    overflow:hidden;
-    margin-top:8px;
-    border:1px solid #0a2a43;
-">
-
-    <div style="
-        width:{progress * 100:.2f}%;
-        height:100%;
-        background:#0a2a43;
-    "></div>
-
-</div>
-""", unsafe_allow_html=True)
+st.progress(progress)
 
 st.markdown(
-    f"""
-    <div style="text-align:center; font-size:35px; margin-top:10px; color:#0a2a43;">
-        {progress * 100:.8f} %
-    </div>
-    """,
+    f"<div style='text-align:center;font-size:35px;color:#0a2a43;margin-top:10px;'>"
+    f"{progress * 100:.8f} %</div>",
     unsafe_allow_html=True
 )
