@@ -21,11 +21,11 @@ remaining = TARGET - now
 # =========================
 # GIF BACKGROUND
 # =========================
-def get_base64(file_path):
-    with open(file_path, "rb") as f:
+def b64(file):
+    with open(file, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
-gif = get_base64("logo.gif")
+gif = b64("logo.gif")
 
 st.markdown(f"""
 <style>
@@ -43,32 +43,35 @@ st.markdown(f"""
 .title {{
     text-align:center;
     font-size:70px;
-    margin-bottom:40px;
+    margin-bottom:30px;
+    color:#00ff88;
 }}
 
-.big {{
-    font-size:120px;
+.grid {{
+    display:flex;
+    justify-content:space-around;
+    margin-top:30px;
+}}
+
+.block {{
     text-align:center;
+}}
+
+.number {{
+    font-size:120px;
     margin:0;
 }}
 
 .label {{
-    font-size:28px;
-    text-align:center;
-    opacity:0.9;
-}}
-
-.row {{
-    display:flex;
-    justify-content:space-around;
-    margin-top:30px;
+    font-size:25px;
+    opacity:0.8;
 }}
 
 </style>
 """, unsafe_allow_html=True)
 
 # =========================
-# TITRE UNIQUE
+# TITRE
 # =========================
 st.markdown("<div class='title'>RETRAITE THOMAS</div>", unsafe_allow_html=True)
 
@@ -81,25 +84,25 @@ minutes = (remaining.seconds % 3600) // 60
 seconds = remaining.seconds % 60
 
 st.markdown(f"""
-<div class="row">
+<div class="grid">
 
-    <div>
-        <div class="big">{days}</div>
+    <div class="block">
+        <div class="number">{days}</div>
         <div class="label">JOURS</div>
     </div>
 
-    <div>
-        <div class="big">{hours}</div>
+    <div class="block">
+        <div class="number">{hours}</div>
         <div class="label">HEURES</div>
     </div>
 
-    <div>
-        <div class="big">{minutes}</div>
+    <div class="block">
+        <div class="number">{minutes}</div>
         <div class="label">MINUTES</div>
     </div>
 
-    <div>
-        <div class="big">{seconds}</div>
+    <div class="block">
+        <div class="number">{seconds}</div>
         <div class="label">SECONDES</div>
     </div>
 
@@ -114,10 +117,11 @@ elapsed = (now - START).total_seconds()
 
 progress = max(0.0, min(1.0, elapsed / total))
 
+# barre native Streamlit (ULTRA STABLE)
 st.progress(progress)
 
 st.markdown(
-    f"<div style='text-align:center;font-size:40px;margin-top:20px;'>"
+    f"<div style='text-align:center;font-size:40px;margin-top:10px;'>"
     f"{progress * 100:.8f} %</div>",
     unsafe_allow_html=True
 )
