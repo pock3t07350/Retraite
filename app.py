@@ -1,6 +1,7 @@
 import streamlit as st
 from datetime import datetime
 from streamlit_autorefresh import st_autorefresh
+import base64
 
 # =========================
 # CONFIG
@@ -18,12 +19,42 @@ now = datetime.now()
 remaining = TARGET - now
 
 # =========================
-# TITRE (SAFE)
+# GIF BACKGROUND (SAFE)
+# =========================
+def get_base64(file):
+    with open(file, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
+gif = get_base64("logo.gif")
+
+st.markdown(f"""
+<style>
+
+/* GIF EN FOND */
+.stApp {{
+    background-image: url("data:image/gif;base64,{gif}");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}}
+
+/* améliore lisibilité */
+.main {{
+    background-color: rgba(0,0,0,0.35);
+    padding: 20px;
+    border-radius: 10px;
+}}
+
+</style>
+""", unsafe_allow_html=True)
+
+# =========================
+# TITRE
 # =========================
 st.title("RETRAITE THOMAS")
 
 # =========================
-# COMPTEUR (STREAMLIT NATIVE = ZÉRO BUG)
+# COMPTEUR
 # =========================
 days = remaining.days
 hours = remaining.seconds // 3600
@@ -38,7 +69,7 @@ col3.metric("MINUTES", minutes)
 col4.metric("SECONDES", seconds)
 
 # =========================
-# PROGRESSION FIABLE
+# PROGRESSION
 # =========================
 total = (TARGET - START).total_seconds()
 elapsed = (now - START).total_seconds()
