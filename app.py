@@ -10,12 +10,12 @@ import base64
 st.set_page_config(page_title="Retraite Thomas", layout="wide")
 
 # =========================
-# 🔁 refresh live
+# 🔁 REFRESH LIVE
 # =========================
 st_autorefresh(interval=1000, key="refresh")
 
 # =========================
-# 🎯 date cible
+# 🎯 DATE CIBLE
 # =========================
 TARGET = datetime(2026, 5, 29, 17, 0, 0)
 
@@ -23,7 +23,7 @@ now = datetime.now()
 remaining = TARGET - now
 
 # =========================
-# 🧠 départ figé
+# 🧠 START FIXE
 # =========================
 if "start_time" not in st.session_state:
     st.session_state.start_time = datetime.now()
@@ -41,6 +41,9 @@ gif_base64 = get_base64("logo.gif")
 
 st.markdown(f"""
 <style>
+/* =========================
+   FOND GLOBAL GIF
+========================= */
 .stApp {{
     background: url("data:image/gif;base64,{gif_base64}");
     background-size: cover;
@@ -49,9 +52,39 @@ st.markdown(f"""
     background-attachment: fixed;
 }}
 
-/* overlay pour lisibilité */
-[data-testid="stAppViewContainer"] > .main {{
-    background-color: rgba(255, 255, 255, 0.15);
+/* =========================
+   SUPPRESSION FONDS STREAMLIT
+========================= */
+[data-testid="stAppViewContainer"],
+[data-testid="stHeader"],
+[data-testid="stToolbar"],
+.main {{
+    background: transparent !important;
+}}
+
+/* blocs UI transparents */
+div[data-testid="stVerticalBlock"],
+div[data-testid="stHorizontalBlock"],
+div[data-testid="stMetric"],
+div[data-testid="stDataFrame"],
+div[data-testid="stPlotlyChart"] {{
+    background: transparent !important;
+    box-shadow: none !important;
+}}
+
+/* progress bar clean */
+.stProgress > div > div > div > div {{
+    background-color: #0a7a2f;
+}}
+
+/* texte */
+html, body, [class*="css"] {{
+    color: #0a7a2f;
+}}
+
+/* titre effet cockpit */
+h1, h2, h3 {{
+    text-shadow: 0px 0px 10px rgba(0,0,0,0.4);
 }}
 </style>
 """, unsafe_allow_html=True)
@@ -101,7 +134,12 @@ progress = max(0.0, min(1.0, progress))
 st.markdown("### 🛰️ COMPTEUR RETRAITE")
 
 st.markdown(f"""
-<h1 style='font-size:70px;color:#0a7a2f;text-align:center;'>
+<h1 style="
+    font-size:70px;
+    color:#0a7a2f;
+    text-align:center;
+    background: transparent;
+">
 {days} J  {hours} H  {minutes} M  {seconds} S
 </h1>
 """, unsafe_allow_html=True)
@@ -125,7 +163,8 @@ def gauge(progress):
     ))
 
     fig.update_layout(
-        paper_bgcolor="white",
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
         font={"color": "#0a7a2f"},
         height=300
     )
@@ -148,7 +187,7 @@ else:
 # FOOTER
 # =========================
 st.markdown("""
-<p style='text-align:center;color:gray'>
-version avec fond GIF animé intégré
+<p style='text-align:center;color:rgba(0,0,0,0.5)'>
+version cockpit transparent + fond GIF animé
 </p>
 """, unsafe_allow_html=True)
