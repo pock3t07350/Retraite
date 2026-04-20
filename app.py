@@ -33,7 +33,6 @@ gif_base64 = get_base64("logo.gif")
 st.markdown(f"""
 <style>
 
-/* BACKGROUND GIF */
 .stApp {{
     background: url("data:image/gif;base64,{gif_base64}");
     background-size: cover;
@@ -42,7 +41,6 @@ st.markdown(f"""
     background-attachment: fixed;
 }}
 
-/* UI TRANSPARENTE */
 [data-testid="stAppViewContainer"],
 [data-testid="stHeader"],
 [data-testid="stToolbar"],
@@ -50,13 +48,11 @@ st.markdown(f"""
     background: transparent !important;
 }}
 
-/* TEXTE HUD */
 html, body {{
     color: #0a7a2f;
     font-family: monospace;
 }}
 
-/* BARRE CUSTOM */
 .hud-bar {{
     width: 100%;
     height: 25px;
@@ -85,7 +81,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # =========================
-# ⏳ TEMPS RESTANT
+# ⏳ COMPTEUR
 # =========================
 remaining = TARGET - now
 
@@ -101,7 +97,7 @@ col3.metric("MINUTES", minutes)
 col4.metric("SECONDES", seconds)
 
 # =========================
-# 📊 PROGRESSION (IMPORTANT)
+# 📊 PROGRESSION ULTRA PRÉCISE
 # =========================
 total = (TARGET - START).total_seconds()
 elapsed = (now - START).total_seconds()
@@ -109,10 +105,8 @@ elapsed = (now - START).total_seconds()
 progress = elapsed / total
 progress = max(0.0, min(1.0, progress))
 
-progress_percent = progress * 100
-
 # =========================
-# 🧭 TIMELINE BAR
+# 🧭 BARRE TIMELINE
 # =========================
 st.markdown("### 🛰️ TIMELINE 2008 → 2026")
 
@@ -127,16 +121,6 @@ st.markdown(f"""
 </div>
 
 <div style="text-align:center; font-size:45px; margin-top:10px;">
-    {progress_percent:.3f} %
+    {progress * 100:.8f} %
 </div>
 """, unsafe_allow_html=True)
-
-# =========================
-# 🚨 STATUS
-# =========================
-if progress > 0.99:
-    st.error("🚨 PHASE FINALE CRITIQUE")
-elif progress > 0.90:
-    st.warning("⚠️ APPROCHE TERMINALE")
-else:
-    st.success("🟢 MISSION ACTIVE")
