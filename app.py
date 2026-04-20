@@ -82,7 +82,7 @@ col4.markdown(f"### SECONDES\n# {seconds}")
 st.progress(progress)
 
 st.markdown(
-    f"<div style='text-align:center;font-size:35px;color:#0a2a43;margin-top:10px;'>"
+    f"<div style='text-align:center;font-size:35px;color:#0a2a43;margin-top:30px;'>"
     f"{progress * 100:.8f} %</div>",
     unsafe_allow_html=True
 )
