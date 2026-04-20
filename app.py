@@ -27,10 +27,13 @@ def get_base64(file):
 
 gif = get_base64("logo.gif")
 
+# bleu foncé style “barre”
+BLUE = "#0a2a43"
+
 st.markdown(f"""
 <style>
 
-/* BACKGROUND GIF FULL VISIBILITY */
+/* BACKGROUND GIF */
 .stApp {{
     background-image: url("data:image/gif;base64,{gif}");
     background-size: cover;
@@ -38,14 +41,9 @@ st.markdown(f"""
     background-repeat: no-repeat;
 }}
 
-/* SUPPRESSION DES FONDS BLANCS STREAMLIT */
-.main {{
+/* TRANSPARENCE GLOBALE */
+.main, .block-container {{
     background: transparent;
-}}
-
-.block-container {{
-    background: transparent;
-    padding-top: 1rem;
 }}
 
 /* TITRE */
@@ -53,21 +51,26 @@ st.markdown(f"""
     text-align:center;
     font-size:70px;
     font-weight:700;
-    color:#00ff88;
-    text-shadow: 0 0 10px rgba(0,255,136,0.5);
+    color:{BLUE};
+    text-shadow: 0 0 6px rgba(10,42,67,0.4);
     margin-bottom:20px;
 }}
 
-/* METRICS TRANSPARENTES */
+/* METRICS */
 div[data-testid="metric-container"] {{
     background: transparent;
-    border: 1px solid rgba(0,255,136,0.25);
+    border: 1px solid {BLUE};
     padding: 12px;
     border-radius: 12px;
 }}
 
+/* TEXTES METRICS */
 label {{
-    color: #00ff88 !important;
+    color: {BLUE} !important;
+}}
+
+div[data-testid="metric-value"] {{
+    color: {BLUE} !important;
 }}
 
 </style>
@@ -104,7 +107,7 @@ progress = max(0.0, min(1.0, elapsed / total))
 st.progress(progress)
 
 st.markdown(
-    f"<div style='text-align:center;font-size:40px;color:#00ff88;'>"
+    f"<div style='text-align:center;font-size:40px;color:{BLUE};'>"
     f"{progress * 100:.8f} %</div>",
     unsafe_allow_html=True
 )
