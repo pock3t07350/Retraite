@@ -46,7 +46,7 @@ st.markdown(f"""
 st.title("RETRAITE THOMAS")
 
 # =========================
-# COMPTEUR (SANS CSS)
+# COMPTEUR
 # =========================
 days = remaining.days
 hours = remaining.seconds // 3600
@@ -69,32 +69,33 @@ elapsed = (now - START).total_seconds()
 progress = max(0.0, min(1.0, elapsed / total))
 
 # =========================
-# BARRE + DATES
+# BARRE FIABLE (FIX VISIBILITÉ)
 # =========================
 st.markdown(f"""
-<div style="display:flex; justify-content:space-between; margin-top:25px;">
+<div style="display:flex; justify-content:space-between; margin-top:25px; font-weight:600; color:#0a2a43;">
     <div>📅 01 Déc 2008</div>
     <div>🎯 29 Mai 2026</div>
 </div>
 
 <div style="
     width:100%;
-    height:22px;
-    background:rgba(0,0,0,0.25);
-    border-radius:10px;
+    height:24px;
+    background:#e6eef5;
+    border-radius:12px;
     overflow:hidden;
     margin-top:8px;
+    border:1px solid #0a2a43;
 ">
 
     <div style="
-        width:{progress * 100}%;
+        width:{progress * 100:.2f}%;
         height:100%;
         background:#0a2a43;
     "></div>
 
 </div>
 
-<div style="text-align:center; font-size:35px; margin-top:10px;">
+<div style="text-align:center; font-size:35px; margin-top:10px; color:#0a2a43;">
     {progress * 100:.8f} %
 </div>
 """, unsafe_allow_html=True)
