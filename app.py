@@ -19,7 +19,7 @@ now = datetime.now()
 remaining = TARGET - now
 
 # =========================
-# GIF BACKGROUND (SAFE)
+# GIF BACKGROUND SAFE
 # =========================
 def get_base64(file):
     with open(file, "rb") as f:
@@ -30,7 +30,7 @@ gif = get_base64("logo.gif")
 st.markdown(f"""
 <style>
 
-/* GIF EN FOND */
+/* BACKGROUND */
 .stApp {{
     background-image: url("data:image/gif;base64,{gif}");
     background-size: cover;
@@ -38,11 +38,28 @@ st.markdown(f"""
     background-repeat: no-repeat;
 }}
 
-/* améliore lisibilité */
-.main {{
-    background-color: rgba(0,0,0,0.35);
-    padding: 20px;
-    border-radius: 10px;
+/* OVERLAY pour lisibilité */
+.block-container {{
+    background-color: rgba(0,0,0,0.45);
+    padding: 2rem;
+    border-radius: 12px;
+}}
+
+/* TITRE */
+.title {{
+    text-align:center;
+    font-size:70px;
+    font-weight:700;
+    color:#00ff88;
+    margin-bottom:20px;
+}}
+
+/* METRICS PLUS CLEAN */
+div[data-testid="metric-container"] {{
+    background: rgba(0,255,136,0.08);
+    border: 1px solid rgba(0,255,136,0.25);
+    padding: 15px;
+    border-radius: 12px;
 }}
 
 </style>
@@ -51,7 +68,7 @@ st.markdown(f"""
 # =========================
 # TITRE
 # =========================
-st.title("RETRAITE THOMAS")
+st.markdown("<div class='title'>RETRAITE THOMAS</div>", unsafe_allow_html=True)
 
 # =========================
 # COMPTEUR
@@ -78,4 +95,8 @@ progress = max(0.0, min(1.0, elapsed / total))
 
 st.progress(progress)
 
-st.write(f"{progress * 100:.8f} %")
+st.markdown(
+    f"<div style='text-align:center;font-size:40px;color:#00ff88;'>"
+    f"{progress * 100:.8f} %</div>",
+    unsafe_allow_html=True
+)
