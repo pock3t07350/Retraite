@@ -50,7 +50,7 @@ st.markdown(f"""
     font-size:60px;
     font-weight:700;
     color:#0a2a43;
-    margin-bottom:160px;
+    margin-bottom:60px;
 }}
 
 </style>
@@ -62,27 +62,27 @@ st.markdown(f"""
 st.markdown("<div class='title'>RETRAITE THOMAS</div>", unsafe_allow_html=True)
 
 # =========================
-# COMPTEUR
+# COMPTEUR (SANS HTML)
 # =========================
 days = remaining.days
 hours = remaining.seconds // 3600
 minutes = (remaining.seconds % 3600) // 60
 seconds = remaining.seconds % 60
 
-col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3, col4 = st.columns(4, gap="large")
 
-col1.markdown(f"### JOURS\n# {days}")
-col2.markdown(f"### HEURES\n# {hours}")
-col3.markdown(f"### MINUTES\n# {minutes}")
-col4.markdown(f"### SECONDES\n# {seconds}")
+col1.metric("JOURS", days)
+col2.metric("HEURES", hours)
+col3.metric("MINUTES", minutes)
+col4.metric("SECONDES", seconds)
 
 # =========================
-# BARRE SIMPLE (VERSION QUI MARCHE)
+# BARRE
 # =========================
 st.progress(progress)
 
 st.markdown(
-    f"<div style='text-align:center;font-size:35px;color:#0a2a43;margin-top:80px;'>"
+    f"<div style='text-align:center;font-size:35px;color:#0a2a43;margin-top:10px;'>"
     f"{progress * 100:.8f} %</div>",
     unsafe_allow_html=True
 )
