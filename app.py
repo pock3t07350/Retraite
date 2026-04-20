@@ -2,9 +2,10 @@ import streamlit as st
 from datetime import datetime
 from streamlit_autorefresh import st_autorefresh
 import plotly.graph_objects as go
+import base64
 
 # =========================
-# 🌐 CONFIG PAGE (DOIT ÊTRE EN PREMIER)
+# 🌐 CONFIG PAGE
 # =========================
 st.set_page_config(page_title="Retraite Thomas", layout="wide")
 
@@ -30,26 +31,28 @@ if "start_time" not in st.session_state:
 start = st.session_state.start_time
 
 # =========================
-# 🎬 BACKGROUND GIF
+# 🎬 GIF BACKGROUND (FIABLE)
 # =========================
-st.markdown("""
+def get_base64(file_path):
+    with open(file_path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
+gif_base64 = get_base64("logo.gif")
+
+st.markdown(f"""
 <style>
-[data-testid="stAppViewContainer"] {
-    background: url("logo.gif");
+.stApp {{
+    background: url("data:image/gif;base64,{gif_base64}");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-}
+    background-attachment: fixed;
+}}
 
-/* rendre le contenu lisible */
-[data-testid="stAppViewContainer"] > .main {
-    background: transparent;
-}
-
-/* option: améliorer lisibilité du texte */
-html, body, [class*="css"] {
-    color: #0a7a2f;
-}
+/* overlay pour lisibilité */
+[data-testid="stAppViewContainer"] > .main {{
+    background-color: rgba(255, 255, 255, 0.15);
+}}
 </style>
 """, unsafe_allow_html=True)
 
@@ -146,6 +149,6 @@ else:
 # =========================
 st.markdown("""
 <p style='text-align:center;color:gray'>
-version stable avec fond animé GIF
+version avec fond GIF animé intégré
 </p>
 """, unsafe_allow_html=True)
