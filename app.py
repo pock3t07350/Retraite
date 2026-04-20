@@ -1,87 +1,5 @@
-import streamlit as st
-from datetime import datetime
-from streamlit_autorefresh import st_autorefresh
-import base64
-
 # =========================
-# 🌐 CONFIG
-# =========================
-st.set_page_config(page_title="Retraite Thomas", layout="wide")
-
-# =========================
-# 🔁 REFRESH
-# =========================
-st_autorefresh(interval=1000, key="refresh")
-
-# =========================
-# 📅 TIMELINE FIXE
-# =========================
-START = datetime(2008, 12, 1, 0, 0, 0)
-TARGET = datetime(2026, 5, 29, 17, 0, 0)
-
-now = datetime.now()
-
-# =========================
-# 🎬 GIF BACKGROUND
-# =========================
-def get_base64(file_path):
-    with open(file_path, "rb") as f:
-        return base64.b64encode(f.read()).decode()
-
-gif_base64 = get_base64("logo.gif")
-
-st.markdown(f"""
-<style>
-
-.stApp {{
-    background: url("data:image/gif;base64,{gif_base64}");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-}}
-
-[data-testid="stAppViewContainer"],
-[data-testid="stHeader"],
-[data-testid="stToolbar"],
-.main {{
-    background: transparent !important;
-}}
-
-html, body {{
-    color: #0a7a2f;
-    font-family: monospace;
-}}
-
-.hud-bar {{
-    width: 100%;
-    height: 25px;
-    background: rgba(0,0,0,0.25);
-    border: 1px solid rgba(10,122,47,0.5);
-    border-radius: 12px;
-    overflow: hidden;
-}}
-
-.hud-fill {{
-    height: 100%;
-    background: linear-gradient(90deg,#0a7a2f,#00ff88);
-    box-shadow: 0 0 10px rgba(10,122,47,0.6);
-}}
-
-</style>
-""", unsafe_allow_html=True)
-
-# =========================
-# 🛰️ TITRE
-# =========================
-st.markdown("""
-<h1 style="text-align:center; font-size:75px; color:#0a7a2f;">
-🛰️ RETRAITE THOMAS
-</h1>
-""", unsafe_allow_html=True)
-
-# =========================
-# ⏳ COMPTEUR
+# ⏳ COMPTEUR HUD GÉANT
 # =========================
 remaining = TARGET - now
 
@@ -90,37 +8,70 @@ hours = remaining.seconds // 3600
 minutes = (remaining.seconds % 3600) // 60
 seconds = remaining.seconds % 60
 
-col1, col2, col3, col4 = st.columns(4)
-col1.metric("JOURS", days)
-col2.metric("HEURES", hours)
-col3.metric("MINUTES", minutes)
-col4.metric("SECONDES", seconds)
+st.markdown("""
+<style>
+.hud-big {
+    text-align:center;
+    font-family: monospace;
+    color:#0a7a2f;
+}
 
-# =========================
-# 📊 PROGRESSION ULTRA PRÉCISE
-# =========================
-total = (TARGET - START).total_seconds()
-elapsed = (now - START).total_seconds()
+/* blocs principaux énormes */
+.big-number {
+    font-size:120px;
+    margin:0;
+    line-height:1;
+}
 
-progress = elapsed / total
-progress = max(0.0, min(1.0, progress))
+/* labels */
+.big-label {
+    font-size:28px;
+    letter-spacing:3px;
+}
 
-# =========================
-# 🧭 BARRE TIMELINE
-# =========================
-st.markdown("### 🛰️ TIMELINE 2008 → 2026")
+/* secondaire */
+.small-number {
+    font-size:50px;
+    margin:0;
+}
+
+.small-label {
+    font-size:18px;
+    opacity:0.8;
+}
+</style>
+""", unsafe_allow_html=True)
 
 st.markdown(f"""
-<div style="display:flex; justify-content:space-between; font-size:18px;">
-    <span>📅 Décembre 2008</span>
-    <span>🎯 29 Mai 2026</span>
-</div>
+<div class="hud-big">
 
-<div class="hud-bar">
-    <div class="hud-fill" style="width:{progress * 100}%;"></div>
-</div>
+    <div>
+        <div class="big-number">{days}</div>
+        <div class="big-label">JOURS</div>
+    </div>
 
-<div style="text-align:center; font-size:45px; margin-top:10px;">
-    {progress * 100:.8f} %
+    <br>
+
+    <div>
+        <div class="big-number">{hours}</div>
+        <div class="big-label">HEURES</div>
+    </div>
+
+    <br>
+
+    <div style="display:flex; justify-content:center; gap:80px; margin-top:20px;">
+
+        <div>
+            <div class="small-number">{minutes}</div>
+            <div class="small-label">MIN</div>
+        </div>
+
+        <div>
+            <div class="small-number">{seconds}</div>
+            <div class="small-label">SEC</div>
+        </div>
+
+    </div>
+
 </div>
 """, unsafe_allow_html=True)
