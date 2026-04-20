@@ -4,19 +4,19 @@ from streamlit_autorefresh import st_autorefresh
 import base64
 
 # =========================
-# 🌐 CONFIG PAGE
+# 🌐 CONFIG
 # =========================
 st.set_page_config(page_title="Retraite Thomas", layout="wide")
 
 # =========================
-# 🔁 REFRESH LIVE
+# 🔁 REFRESH
 # =========================
 st_autorefresh(interval=1000, key="refresh")
 
 # =========================
 # 📅 TIMELINE FIXE
 # =========================
-start = datetime(2008, 12, 1, 0, 0, 0)
+START = datetime(2008, 12, 1, 0, 0, 0)
 TARGET = datetime(2026, 5, 29, 17, 0, 0)
 
 now = datetime.now()
@@ -42,7 +42,7 @@ st.markdown(f"""
     background-attachment: fixed;
 }}
 
-/* FULL TRANSPARENT UI */
+/* UI TRANSPARENTE */
 [data-testid="stAppViewContainer"],
 [data-testid="stHeader"],
 [data-testid="stToolbar"],
@@ -50,14 +50,26 @@ st.markdown(f"""
     background: transparent !important;
 }}
 
-/* HUD TEXT STYLE */
+/* TEXTE HUD */
 html, body {{
     color: #0a7a2f;
     font-family: monospace;
 }}
 
-h1, h2, h3 {{
-    text-shadow: 0 0 10px rgba(0,0,0,0.4);
+/* BARRE CUSTOM */
+.hud-bar {{
+    width: 100%;
+    height: 25px;
+    background: rgba(0,0,0,0.25);
+    border: 1px solid rgba(10,122,47,0.5);
+    border-radius: 12px;
+    overflow: hidden;
+}}
+
+.hud-fill {{
+    height: 100%;
+    background: linear-gradient(90deg,#0a7a2f,#00ff88);
+    box-shadow: 0 0 10px rgba(10,122,47,0.6);
 }}
 
 </style>
@@ -67,16 +79,32 @@ h1, h2, h3 {{
 # 🛰️ TITRE
 # =========================
 st.markdown("""
-<h1 style="text-align:center; font-size:80px; color:#0a7a2f;">
+<h1 style="text-align:center; font-size:75px; color:#0a7a2f;">
 🛰️ RETRAITE THOMAS
 </h1>
 """, unsafe_allow_html=True)
 
 # =========================
-# 📊 PROGRESSION
+# ⏳ TEMPS RESTANT
 # =========================
-total = (TARGET - start).total_seconds()
-elapsed = (now - start).total_seconds()
+remaining = TARGET - now
+
+days = remaining.days
+hours = remaining.seconds // 3600
+minutes = (remaining.seconds % 3600) // 60
+seconds = remaining.seconds % 60
+
+col1, col2, col3, col4 = st.columns(4)
+col1.metric("JOURS", days)
+col2.metric("HEURES", hours)
+col3.metric("MINUTES", minutes)
+col4.metric("SECONDES", seconds)
+
+# =========================
+# 📊 PROGRESSION (IMPORTANT)
+# =========================
+total = (TARGET - START).total_seconds()
+elapsed = (now - START).total_seconds()
 
 progress = elapsed / total
 progress = max(0.0, min(1.0, progress))
@@ -84,64 +112,31 @@ progress = max(0.0, min(1.0, progress))
 progress_percent = progress * 100
 
 # =========================
-# 🧭 HUD TIMELINE BAR
+# 🧭 TIMELINE BAR
 # =========================
-st.markdown("### 🛰️ TIMELINE SYSTEM")
+st.markdown("### 🛰️ TIMELINE 2008 → 2026")
 
 st.markdown(f"""
-<div style="text-align:center;">
-
-<!-- LABELS -->
 <div style="display:flex; justify-content:space-between; font-size:18px;">
     <span>📅 Décembre 2008</span>
     <span>🎯 29 Mai 2026</span>
 </div>
 
-<!-- BAR -->
-<div style="
-    width:100%;
-    height:25px;
-    background: rgba(0,0,0,0.25);
-    border: 1px solid rgba(10,122,47,0.5);
-    border-radius: 12px;
-    overflow: hidden;
-    margin-top:10px;
-">
-
-    <div style="
-        width:{progress * 100}%;
-        height:100%;
-        background: linear-gradient(90deg, #0a7a2f, #00ff88);
-        box-shadow: 0 0 12px rgba(10,122,47,0.7);
-    "></div>
-
+<div class="hud-bar">
+    <div class="hud-fill" style="width:{progress * 100}%;"></div>
 </div>
 
-<!-- % -->
-<div style="font-size:40px; margin-top:10px;">
+<div style="text-align:center; font-size:45px; margin-top:10px;">
     {progress_percent:.3f} %
-</div>
-
 </div>
 """, unsafe_allow_html=True)
 
 # =========================
-# 📌 STATUS LOGIC
+# 🚨 STATUS
 # =========================
-st.markdown("### 🧭 STATUS")
-
 if progress > 0.99:
     st.error("🚨 PHASE FINALE CRITIQUE")
 elif progress > 0.90:
     st.warning("⚠️ APPROCHE TERMINALE")
 else:
-    st.success("🟢 MISSION EN COURS")
-
-# =========================
-# FOOTER
-# =========================
-st.markdown("""
-<p style='text-align:center; color:rgba(0,0,0,0.5)'>
-HUD TIMELINE SYSTEM — 2008 → 2026
-</p>
-""", unsafe_allow_html=True)
+    st.success("🟢 MISSION ACTIVE")
