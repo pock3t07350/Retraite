@@ -27,50 +27,14 @@ def get_base64(file):
 
 gif = get_base64("logo.gif")
 
-# bleu foncé style “barre”
-BLUE = "#0a2a43"
-
 st.markdown(f"""
 <style>
 
-/* BACKGROUND GIF */
 .stApp {{
     background-image: url("data:image/gif;base64,{gif}");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-}}
-
-/* TRANSPARENCE GLOBALE */
-.main, .block-container {{
-    background: transparent;
-}}
-
-/* TITRE */
-.title {{
-    text-align:center;
-    font-size:70px;
-    font-weight:700;
-    color:{BLUE};
-    text-shadow: 0 0 6px rgba(10,42,67,0.4);
-    margin-bottom:20px;
-}}
-
-/* METRICS */
-div[data-testid="metric-container"] {{
-    background: transparent;
-    border: 1px solid {BLUE};
-    padding: 12px;
-    border-radius: 12px;
-}}
-
-/* TEXTES METRICS */
-label {{
-    color: {BLUE} !important;
-}}
-
-div[data-testid="metric-value"] {{
-    color: {BLUE} !important;
 }}
 
 </style>
@@ -79,10 +43,10 @@ div[data-testid="metric-value"] {{
 # =========================
 # TITRE
 # =========================
-st.markdown("<div class='title'>RETRAITE THOMAS</div>", unsafe_allow_html=True)
+st.title("RETRAITE THOMAS")
 
 # =========================
-# COMPTEUR
+# COMPTEUR (SANS CSS)
 # =========================
 days = remaining.days
 hours = remaining.seconds // 3600
@@ -91,10 +55,10 @@ seconds = remaining.seconds % 60
 
 col1, col2, col3, col4 = st.columns(4)
 
-col1.metric("JOURS", days)
-col2.metric("HEURES", hours)
-col3.metric("MINUTES", minutes)
-col4.metric("SECONDES", seconds)
+col1.markdown(f"### JOURS\n# {days}")
+col2.markdown(f"### HEURES\n# {hours}")
+col3.markdown(f"### MINUTES\n# {minutes}")
+col4.markdown(f"### SECONDES\n# {seconds}")
 
 # =========================
 # PROGRESSION
@@ -104,10 +68,33 @@ elapsed = (now - START).total_seconds()
 
 progress = max(0.0, min(1.0, elapsed / total))
 
-st.progress(progress)
+# =========================
+# BARRE + DATES
+# =========================
+st.markdown(f"""
+<div style="display:flex; justify-content:space-between; margin-top:25px;">
+    <div>📅 01 Déc 2008</div>
+    <div>🎯 29 Mai 2026</div>
+</div>
 
-st.markdown(
-    f"<div style='text-align:center;font-size:40px;color:{BLUE};'>"
-    f"{progress * 100:.8f} %</div>",
-    unsafe_allow_html=True
-)
+<div style="
+    width:100%;
+    height:22px;
+    background:rgba(0,0,0,0.25);
+    border-radius:10px;
+    overflow:hidden;
+    margin-top:8px;
+">
+
+    <div style="
+        width:{progress * 100}%;
+        height:100%;
+        background:#0a2a43;
+    "></div>
+
+</div>
+
+<div style="text-align:center; font-size:35px; margin-top:10px;">
+    {progress * 100:.8f} %
+</div>
+""", unsafe_allow_html=True)
