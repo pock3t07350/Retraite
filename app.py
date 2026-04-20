@@ -19,7 +19,7 @@ now = datetime.now()
 remaining = TARGET - now
 
 # =========================
-# GIF BACKGROUND SAFE
+# GIF BACKGROUND
 # =========================
 def get_base64(file):
     with open(file, "rb") as f:
@@ -30,7 +30,7 @@ gif = get_base64("logo.gif")
 st.markdown(f"""
 <style>
 
-/* BACKGROUND */
+/* BACKGROUND GIF FULL VISIBILITY */
 .stApp {{
     background-image: url("data:image/gif;base64,{gif}");
     background-size: cover;
@@ -38,11 +38,14 @@ st.markdown(f"""
     background-repeat: no-repeat;
 }}
 
-/* OVERLAY pour lisibilité */
+/* SUPPRESSION DES FONDS BLANCS STREAMLIT */
+.main {{
+    background: transparent;
+}}
+
 .block-container {{
-    background-color: rgba(0,0,0,0.45);
-    padding: 2rem;
-    border-radius: 12px;
+    background: transparent;
+    padding-top: 1rem;
 }}
 
 /* TITRE */
@@ -51,15 +54,20 @@ st.markdown(f"""
     font-size:70px;
     font-weight:700;
     color:#00ff88;
+    text-shadow: 0 0 10px rgba(0,255,136,0.5);
     margin-bottom:20px;
 }}
 
-/* METRICS PLUS CLEAN */
+/* METRICS TRANSPARENTES */
 div[data-testid="metric-container"] {{
-    background: rgba(0,255,136,0.08);
+    background: transparent;
     border: 1px solid rgba(0,255,136,0.25);
-    padding: 15px;
+    padding: 12px;
     border-radius: 12px;
+}}
+
+label {{
+    color: #00ff88 !important;
 }}
 
 </style>
