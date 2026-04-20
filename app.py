@@ -97,7 +97,7 @@ col4.markdown(
 st.progress(progress)
 
 st.markdown(
-    f"<div style='text-align:center;font-size:35px;color:#0a2a43;margin-top:10px;'>"
+    f"<div style='text-align:center;font-size:35px;color:#0a2a43;margin-top:100px;'>"
     f"{progress * 100:.8f} %</div>",
     unsafe_allow_html=True
 )
