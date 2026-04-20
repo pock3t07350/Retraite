@@ -37,13 +37,22 @@ st.markdown(f"""
     background-repeat: no-repeat;
 }}
 
+/* CENTRAGE TITRE */
+.title {{
+    text-align:center;
+    font-size:60px;
+    font-weight:700;
+    color:#0a2a43;
+    margin-top:10px;
+}}
+
 </style>
 """, unsafe_allow_html=True)
 
 # =========================
-# TITRE
+# TITRE CENTRÉ
 # =========================
-st.title("RETRAITE THOMAS")
+st.markdown("<div class='title'>RETRAITE THOMAS</div>", unsafe_allow_html=True)
 
 # =========================
 # COMPTEUR
@@ -69,10 +78,10 @@ elapsed = (now - START).total_seconds()
 progress = max(0.0, min(1.0, elapsed / total))
 
 # =========================
-# BARRE FIABLE (FIX VISIBILITÉ)
+# BARRE FIABLE
 # =========================
 st.markdown(f"""
-<div style="display:flex; justify-content:space-between; margin-top:25px; font-weight:600; color:#0a2a43;">
+<div style="display:flex; justify-content:space-between; margin-top:25px; color:#0a2a43; font-weight:600;">
     <div>📅 01 Déc 2008</div>
     <div>🎯 29 Mai 2026</div>
 </div>
