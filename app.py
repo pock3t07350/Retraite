@@ -19,7 +19,7 @@ now = datetime.now()
 remaining = TARGET - now
 
 # =========================
-# PROGRESSION
+# PROGRESSION t
 # =========================
 total = (TARGET - START).total_seconds()
 elapsed = (now - START).total_seconds()
